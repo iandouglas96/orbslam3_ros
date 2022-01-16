@@ -18,7 +18,7 @@ ORB_SLAM3::System ORBSLAM3Ros::createSLAM(const ros::NodeHandle& nh) {
 }
 
 void ORBSLAM3Ros::initialize() {
-  image_sub_ = nh_.subscribe<sensor_msgs::Image>("image", 1, &ORBSLAM3Ros::imageCallback, this);
+  image_sub_ = nh_.subscribe<sensor_msgs::Image>("image", 50, &ORBSLAM3Ros::imageCallback, this);
   pose_pub_ = nh_.advertise<geometry_msgs::PoseStamped>("pose", 1);
 }
 
