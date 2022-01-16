@@ -25,19 +25,24 @@ void ORBSLAM3Ros::initialize() {
 void ORBSLAM3Ros::imageCallback(const sensor_msgs::Image::ConstPtr& img_msg) {
   cv_bridge::CvImageConstPtr cv_ptr = cv_bridge::toCvShare(img_msg);
   Sophus::SE3f pose = SLAM_.TrackMonocular(cv_ptr->image, cv_ptr->header.stamp.toSec());
-  Sophus::SE3f pose_inv = pose.inverse();
 
-  geometry_msgs::PoseStamped pose_msg;
-  pose_msg.header.stamp = img_msg->header.stamp;
-  pose_msg.header.frame_id = "world";
+  if (pose.translation().norm() > 0.0001) {
+    Sophus::SE3f pose_inv = pose.inverse();
 
-  pose_msg.pose.position.x = pose_inv.translation()[0];
-  pose_msg.pose.position.y = pose_inv.translation()[1];
-  pose_msg.pose.position.z = pose_inv.translation()[2];
-  pose_msg.pose.orientation.x = pose_inv.unit_quaternion().x();
-  pose_msg.pose.orientation.y = pose_inv.unit_quaternion().y();
-  pose_msg.pose.orientation.z = pose_inv.unit_quaternion().z();
-  pose_msg.pose.orientation.w = pose_inv.unit_quaternion().w();
+    geometry_msgs::PoseStamped pose_msg;
+    pose_msg.header.stamp = img_msg->header.stamp;
+    pose_msg.header.frame_id = "world";
 
-  pose_pub_.publish(pose_msg);
+    pose_msg.pose.position.x = pose_inv.translation()[0];
+    pose_msg.pose.position.y = pose_inv.translation()[1];
+    pose_msg.pose.position.z = pose_inv.translation()[2];
+    pose_msg.pose.orientation.x = pose_inv.unit_quaternion().x();
+    pose_msg.pose.orientation.y = pose_inv.unit_quaternion().y();
+    pose_msg.pose.orientation.z = pose_inv.unit_quaternion().z();
+    pose_msg.pose.orientation.w = pose_inv.unit_quaternion().w();
+
+    pose_pub_.publish(pose_msg);
+  } else {
+    ROS_WARN("Initializing...");
+  }
 }
