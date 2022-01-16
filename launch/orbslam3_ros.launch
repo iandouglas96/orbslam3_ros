@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+  <node pkg="orbslam3_ros" type="orbslam3_ros_node" name="orbslam3_ros_node" output="screen">
+    <param name="vocab_path" value="/home/ian/Repos/ORB_SLAM3/Vocabulary/ORBvoc.txt"/>
+    <param name="settings_path" value="/home/ian/Repos/ORB_SLAM3/Examples/Monocular/GQ.yaml"/>
+    <param name="show_viz" value="False"/>
+
+    <remap from="~image" to="/camera/image_raw"/>
+  </node>
+</launch>
