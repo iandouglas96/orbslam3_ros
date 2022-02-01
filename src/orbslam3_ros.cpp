@@ -26,7 +26,7 @@ void ORBSLAM3Ros::imageCallback(const sensor_msgs::Image::ConstPtr& img_msg) {
   cv_bridge::CvImageConstPtr cv_ptr = cv_bridge::toCvShare(img_msg);
   Sophus::SE3f pose = SLAM_.TrackMonocular(cv_ptr->image, cv_ptr->header.stamp.toSec());
 
-  if (pose.translation().norm() > 0.0001 && !initialized_) {
+  if (pose.translation().norm() > 0.0001 && !tracking_lost_) {
     initialized_ = true;
     Sophus::SE3f pose_inv = pose.inverse();
 
@@ -50,5 +50,7 @@ void ORBSLAM3Ros::imageCallback(const sensor_msgs::Image::ConstPtr& img_msg) {
     ROS_WARN("Initializing...");
   } else {
     ROS_ERROR("Tracking Lost");
+    // Blocks from ever publishing again and trashing the map
+    tracking_lost_ = true;
   }
 }
