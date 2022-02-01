@@ -27,4 +27,5 @@ class ORBSLAM3Ros {
     ORB_SLAM3::System SLAM_;
 
     bool initialized_ = false;
+    bool tracking_lost_ = false;
 };
