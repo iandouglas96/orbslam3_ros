@@ -45,7 +45,7 @@ void ORBSLAM3Ros::imageCallback(const sensor_msgs::Image::ConstPtr& img_msg) {
     pose_pub_.publish(pose_msg);
 
     ROS_INFO_STREAM("Tracking Latency: " << 
-        (pose_msg.header.stamp - ros::Time::now()).toSec() << " sec");
+        (ros::Time::now() - pose_msg.header.stamp).toSec() << " sec");
   } else if (!initialized_) {
     ROS_WARN("Initializing...");
   } else {
