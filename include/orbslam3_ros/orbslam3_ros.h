@@ -25,4 +25,6 @@ class ORBSLAM3Ros {
     ros::Publisher pose_pub_;
 
     ORB_SLAM3::System SLAM_;
+
+    bool initialized_ = false;
 };

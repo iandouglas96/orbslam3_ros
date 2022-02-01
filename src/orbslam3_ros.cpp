@@ -18,7 +18,7 @@ ORB_SLAM3::System ORBSLAM3Ros::createSLAM(const ros::NodeHandle& nh) {
 }
 
 void ORBSLAM3Ros::initialize() {
-  image_sub_ = nh_.subscribe<sensor_msgs::Image>("image", 50, &ORBSLAM3Ros::imageCallback, this);
+  image_sub_ = nh_.subscribe<sensor_msgs::Image>("image", 30, &ORBSLAM3Ros::imageCallback, this);
   pose_pub_ = nh_.advertise<geometry_msgs::PoseStamped>("pose", 1);
 }
 
@@ -26,7 +26,8 @@ void ORBSLAM3Ros::imageCallback(const sensor_msgs::Image::ConstPtr& img_msg) {
   cv_bridge::CvImageConstPtr cv_ptr = cv_bridge::toCvShare(img_msg);
   Sophus::SE3f pose = SLAM_.TrackMonocular(cv_ptr->image, cv_ptr->header.stamp.toSec());
 
-  if (pose.translation().norm() > 0.0001) {
+  if (pose.translation().norm() > 0.0001 && !initialized_) {
+    initialized_ = true;
     Sophus::SE3f pose_inv = pose.inverse();
 
     geometry_msgs::PoseStamped pose_msg;
@@ -42,7 +43,12 @@ void ORBSLAM3Ros::imageCallback(const sensor_msgs::Image::ConstPtr& img_msg) {
     pose_msg.pose.orientation.w = pose_inv.unit_quaternion().w();
 
     pose_pub_.publish(pose_msg);
-  } else {
+
+    ROS_INFO_STREAM("Tracking Latency: " << 
+        (pose_msg.header.stamp - ros::Time::now()).toSec() << " sec");
+  } else if (!initialized_) {
     ROS_WARN("Initializing...");
+  } else {
+    ROS_ERROR("Tracking Lost");
   }
 }
