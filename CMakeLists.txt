@@ -21,6 +21,7 @@ find_library(ORB_SLAM3_LIBRARY ORB_SLAM3 ${ORBSLAM3_PATH}/lib)
 find_package(Eigen3 REQUIRED)
 find_package(OpenCV REQUIRED)
 find_package(Pangolin REQUIRED)
+find_package(Sophus REQUIRED)
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -168,6 +169,7 @@ target_link_libraries(${PROJECT_NAME}_node
   ${OpenCV_LIBS}
   ${catkin_LIBRARIES}
   ${Pangolin_LIBRARIES}
+  Sophus::Sophus
 )
 
 #############
