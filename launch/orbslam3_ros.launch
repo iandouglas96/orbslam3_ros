@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <launch>
-  <node pkg="orbslam3_ros" type="orbslam3_ros_node" name="orbslam3_ros_node" output="screen">
-    <param name="vocab_path" value="/home/ian/Repos/ORB_SLAM3/Vocabulary/ORBvoc.txt"/>
-    <param name="settings_path" value="$(find orbslam3_ros)/config/GQ.yaml"/>
-    <param name="show_viz" value="True"/>
+  <arg name="output" default="screen"/>
 
-    <remap from="~image" to="/camera/image_raw"/>
+  <arg name="vocab_path" default="$(env HOME)/Repos/ORB_SLAM3/Vocabulary/ORBvoc.txt"/>
+  <arg name="settings_path" default="$(find orbslam3_ros)/config/titan_wide.yaml"/>
+  <arg name="show_viz" default="False"/>
+
+  <node pkg="orbslam3_ros" type="orbslam3_ros_node" name="orbslam3_ros_node" output="$(arg output)">
+    <param name="vocab_path" value="$(arg vocab_path)"/>
+    <param name="settings_path" value="$(arg settings_path)"/>
+    <param name="show_viz" value="$(arg show_viz)"/>
+
+    <remap from="~image" to="/ovc/rgb/image_color"/>
   </node>
 </launch>
