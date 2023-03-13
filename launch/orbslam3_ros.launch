@@ -3,7 +3,7 @@
   <arg name="output" default="screen"/>
 
   <arg name="vocab_path" default="$(env HOME)/Repos/ORB_SLAM3/Vocabulary/ORBvoc.txt"/>
-  <arg name="settings_path" default="$(find orbslam3_ros)/config/titan_wide.yaml"/>
+  <arg name="settings_path" default="$(find orbslam3_ros)/config/titan_wide2.yaml"/>
   <arg name="show_viz" default="False"/>
 
   <node pkg="orbslam3_ros" type="orbslam3_ros_node" name="orbslam3_ros_node" output="$(arg output)">
