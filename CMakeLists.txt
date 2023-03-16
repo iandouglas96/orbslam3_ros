@@ -16,7 +16,7 @@ find_package(catkin REQUIRED COMPONENTS
   cv_bridge
 )
 
-set(ORBSLAM3_PATH /home/ian/Repos/ORB_SLAM3)
+set(ORBSLAM3_PATH $ENV{HOME}/Repos/ORB_SLAM3)
 find_library(ORB_SLAM3_LIBRARY ORB_SLAM3 ${ORBSLAM3_PATH}/lib)
 find_package(Eigen3 REQUIRED)
 find_package(OpenCV REQUIRED)
